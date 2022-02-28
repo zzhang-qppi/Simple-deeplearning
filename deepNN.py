@@ -115,5 +115,5 @@ def test(test_X_f, test_Y_f, parameters):
 	return accuracy
 
 
-parameters = multi_layers_learning(train_X, train_Y, n_dimensions, l_rate, n_iterations)
-print('模型准确度：' + test(test_X, test_Y, parameters))
+#parameters = multi_layers_learning(train_X, train_Y, n_dimensions, l_rate, n_iterations)
+#print('模型准确度：' + test(test_X, test_Y, parameters))
