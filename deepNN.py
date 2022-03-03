@@ -101,7 +101,7 @@ def multi_layers_learning(train_X_f, train_Y_f, n_dimensions_f, l_rate_f, n_iter
 		parameters = update_parameters(parameters, gradients, l_rate_f)
 	costs_plot, ax = plt.subplots()
 	ax.plot(range(len(costs)), costs, linewidth=2.0)
-	ax.set(xlable='iterations', ylable='costs', title='costs_plot')
+	ax.set(xlable='iterations', ylable='costs', title='deep_costs_plot')
 	plt.show()
 	return parameters
 

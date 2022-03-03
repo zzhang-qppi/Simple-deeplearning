@@ -101,7 +101,7 @@ def two_layers_learning(train_X_f, train_Y_f, n_dimensions_f, l_rate_f, n_iterat
 		parameters = update_parameters(parameters, gradients, l_rate_f)
 	costs_plot, ax = plt.subplots()
 	ax.plot(range(len(costs)), costs, linewidth=2.0)
-	ax.set(xlable='iterations', ylable='costs', title='costs_plot')
+	ax.set(xlable='iterations', ylable='costs', title='shallow_costs_plot')
 	plt.show()
 	return parameters
 
@@ -114,7 +114,7 @@ def test(test_X_f, test_Y_f, parameters):
 	accuracy = np.sum(compare_result)/test_X_f.shape[1]
 	return accuracy
 
-hyper_parameters = {'n_hidden':5, 'l_rate':0.1, 'n_iterations':200}
-n_dimensions_m = (hyper_parameters['n_hidden'], train_X_m.shape[0], train_Y_m.shape[0])
-parameters_m = two_layers_learning(train_X_f, train_Y_f, n_dimensions_m, hyper_parameters['l_rate'], hyper_parameters['n_iterations'])
-print('模型准确度：' + test(test_X_f, test_Y_f, parameters_m))
+#hyper_parameters = {'n_hidden':5, 'l_rate':0.1, 'n_iterations':200}
+#n_dimensions_m = (hyper_parameters['n_hidden'], train_X_m.shape[0], train_Y_m.shape[0])
+#parameters_m = two_layers_learning(train_X_f, train_Y_f, n_dimensions_m, hyper_parameters['l_rate'], hyper_parameters['n_iterations'])
+#print('模型准确度：' + test(test_X_f, test_Y_f, parameters_m))
