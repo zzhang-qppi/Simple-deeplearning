@@ -1,3 +1,4 @@
+from tkinter import W
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -25,14 +26,14 @@ def forward_propogation(A_prev, W, b, activation_func):
 def forward_in_total(A0, parameters):
 	caches = []
 	A = A0
-	L = len(parameters)/2
+	L = int(len(parameters)/2)
 	for i in range(1, L):
 		A_prev = A
 		W = parameters['W%d'%i]
 		b = parameters['b%d'%i]
-		A, cache = forward_propogation(A_prev, W, b, activation_func='sigmoid')
+		A, cache = forward_propogation(A_prev, W, b, 'sigmoid')
 		caches.append(cache)
-	A_output, cache = forward_propogation(A, 'W%d'%L, 'b%d'%L)
+	A_output, cache = forward_propogation(A, parameters['W%d'%L], parameters['b%d'%L], 'sigmoid')
 	caches.append(cache)
 	assert A_output.shape == (1,A0.shape[1])
 	assert len(caches) == L
@@ -45,6 +46,7 @@ def cost_calculation(A_output, Y):
 
 def sigmoid_backward(dA, Z):
 	a = 1/(1+np.exp(-Z))
+	print(Z.shape, dA.shape)
 	dZ = dA * a * (1-a)
 	return dZ
 
@@ -56,9 +58,15 @@ def relu_backward(dA, Z):
 def linear_backward(dZ, linear_cache):
 	A_prev, W, b = linear_cache
 	m = A_prev.shape[1]
-	dW = np.dot(A_prev.T, dZ) / m
+	dW = np.dot(dZ, A_prev.T) / m
 	db = np.sum(dZ, axis=1, keepdims=True) / m
+	W = np.tile(W,(dZ.shape[0],1))
 	dA_prev = np.dot(W.T, dZ)
+
+#	assert (dA_prev.shape == A_prev.shape)
+#	assert (dW.shape == W.shape)
+#	assert (db.shape == b.shape)
+
 	return dA_prev, dW, db
 
 def linear_activation_backward(dA, linear_cache, activation_cache, activation_func):
@@ -75,16 +83,15 @@ def backward_in_total(A_output, train_Y_f, caches):
 	dA_output = - (np.divide(train_Y_f, A_output) - np.divide(1 - train_Y_f, 1 - A_output))
 	dA = dA_output
 	for i in range(1, len(caches)+1):
-		dA = dA_prev
 		linear_cache, activaiton_cache = caches[len(caches)-i]
-		dA_prev, dW, db = linear_activation_backward(dA, linear_cache, activaiton_cache)
+		dA_prev, dW, db = linear_activation_backward(dA, linear_cache, activaiton_cache, 'sigmoid')
 		gradients['dA%d'%(len(caches)+1-i)]=dA_prev
 		gradients['dW%d'%(len(caches)+1-i)]=dW
 		gradients['db%d'%(len(caches)+1-i)]=db
 	return gradients
 
 def update_parameters(parameters, gradients, l_rate_f):
-	L = len(parameters)/2
+	L = int(len(parameters)/2)
 	for i in range(1, L+1):
 		parameters['w%d'%i] = parameters['w%d'%i] - l_rate_f * gradients['w%d'%i]
 		parameters['b%d'%i] = parameters['b%d'%i] - l_rate_f * gradients['b%d'%i]
